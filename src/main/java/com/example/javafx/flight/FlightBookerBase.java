@@ -81,7 +81,20 @@ public class FlightBookerBase extends Application {
     }
 
     private void validate(ActionEvent event) {
-        // TODO Aufgabe 4
+        System.out.println("Book!");
+        LocalDate localStartDate = stringToDate(startDate.getText());
+        LocalDate localReturnDate = stringToDate(returnDate.getText());
+
+        boolean startValid = localStartDate != null;
+        boolean returnValid = flightType.getValue() == FlightType.ONE_WAY_FLIGHT || localReturnDate != null;
+        boolean dateOrderValid = flightType.getValue() == FlightType.ONE_WAY_FLIGHT || (localStartDate != null && localReturnDate != null && !localStartDate.isAfter(localReturnDate));
+
+        if (!startValid) {
+            startDate.setStyle(STYLE_ERROR);
+        }
+        if (!returnValid || !dateOrderValid) {
+            returnDate.setStyle(STYLE_ERROR);
+        }
     }
 
 }
