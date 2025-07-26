@@ -4,6 +4,7 @@ import com.example.javafx.aktien.model.*;
 import javafx.collections.*;
 import javafx.geometry.*;
 import javafx.scene.control.*;
+import javafx.scene.control.cell.*;
 import javafx.scene.layout.*;
 
 public class AktienView extends VBox {
@@ -30,11 +31,41 @@ public class AktienView extends VBox {
         super(10);
         setPadding(new Insets(10));
 
-        // TODO Tabelle aufbauen
+        // Tabelle aufbauen
+        TableColumn<RowData,String> colName  = new TableColumn<>("Aktie");
+        colName .setCellValueFactory(new PropertyValueFactory<>("name"));
+        colName .setPrefWidth(120);
 
-        // TODO GridPane
+        TableColumn<RowData,Double> colPreis = new TableColumn<>("Preis");
+        colPreis.setCellValueFactory(new PropertyValueFactory<>("price"));
+        colPreis.setPrefWidth(100);
 
-        // TODO HBox
+        TableColumn<RowData,Integer> colOwn   = new TableColumn<>("Besitz");
+        colOwn  .setCellValueFactory(new PropertyValueFactory<>("own"));
+        colOwn  .setPrefWidth(80);
+
+        TableColumn<RowData,Double> colWert  = new TableColumn<>("Wert");
+        colWert .setCellValueFactory(new PropertyValueFactory<>("value"));
+        colWert .setPrefWidth(100);
+
+        TableColumn<RowData,Double> colDiff  = new TableColumn<>("Diff");
+        colDiff .setCellValueFactory(new PropertyValueFactory<>("diff"));
+        colDiff .setPrefWidth(100);
+
+        table.getColumns().addAll(colName, colPreis, colOwn, colWert, colDiff);
+
+        // Layout
+        GridPane status = new GridPane();
+        status.setHgap(10); status.setVgap(5);
+        status.addRow(0, new Label("Index:"), tfIndex, new Label("Δ:"), tfDiff);
+        status.addRow(1, new Label("Aktien:"), tfAktien, new Label("Geld:"), tfGeld);
+        status.addRow(2, new Label("Gesamt:"), tfGesamt);
+
+        HBox actions = new HBox(10, cbAktie, rbKauf, rbVerkauf, slider, tfMoney, btnExecute, btnNextDay);
+        rbKauf.setSelected(true);
+
+        // View zusammensetzen
+        getChildren().addAll(table, status, actions);
     }
 
     private static TextField createDisabledField() {
