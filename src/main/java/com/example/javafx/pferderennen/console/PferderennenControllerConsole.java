@@ -15,6 +15,24 @@ public class PferderennenControllerConsole implements Anzeige {
     @Override
     public void rennenAnzeigen(Pferd[] pferde) {
         // aktuellen Fortschritt der Pferde anzeigen
+        System.out.println();
+        System.out.println();
+        System.out.println();
+        System.out.println();
+        System.out.println();
+        System.out.println();
+        System.out.println();
+        System.out.println();
+        System.out.println();
+        System.out.println();
+
+        for (int i = 0; i < pferde.length; i++) {
+            System.out.printf("%20s ", pferde[i].getName());
+            for (int m = 0; m < pferde[i].getMeter() / 20; m++) {
+                System.out.print('.');
+            }
+            System.out.println();
+        }
     }
 
     public static void main(String[] args) {
@@ -22,11 +40,12 @@ public class PferderennenControllerConsole implements Anzeige {
 
         // Pferde anzeigen
         for (Pferd pferd : controller.model.getPferde()) {
-            // ...
+            System.out.println(pferd);
         }
 
         // Auf ENTER warten
         Scanner sc = new Scanner(System.in);
+        System.out.print("Los?");
         sc.nextLine();
 
         // Rennen starten
