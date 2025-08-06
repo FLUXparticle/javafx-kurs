@@ -26,6 +26,7 @@ public class AktienView extends VBox {
     public final TextField           tfMoney      = createDisabledField();
     public final Button              btnExecute   = new Button("Ausführen");
     public final Button              btnNextDay   = new Button("Nächster Tag");
+    public final Button              btnChart     = new Button("Chart anzeigen");
 
     public AktienView() {
         super(10);
@@ -61,7 +62,7 @@ public class AktienView extends VBox {
         status.addRow(1, new Label("Aktien:"), tfAktien, new Label("Geld:"), tfGeld);
         status.addRow(2, new Label("Gesamt:"), tfGesamt);
 
-        HBox actions = new HBox(10, cbAktie, rbKauf, rbVerkauf, slider, tfMoney, btnExecute, btnNextDay);
+        HBox actions = new HBox(10, cbAktie, rbKauf, rbVerkauf, slider, tfMoney, btnExecute, btnNextDay, btnChart);
         rbKauf.setSelected(true);
 
         // View zusammensetzen

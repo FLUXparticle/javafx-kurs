@@ -24,6 +24,7 @@ public class AktienController {
         view.slider.valueProperty().addListener((o, oldV, newV) -> updateMoney());
         view.btnExecute.setOnAction(e -> executeTrade());
         view.btnNextDay.setOnAction(e -> nextDay());
+        view.btnChart.setOnAction(e -> openChart());
 
         // Startzustand
         updateTable();
@@ -90,5 +91,10 @@ public class AktienController {
         updateTable();
         updateSlider();
         updateMoney();
+    }
+
+    private void openChart() {
+        ChartController chartController = new ChartController(model);
+        chartController.show();
     }
 }
