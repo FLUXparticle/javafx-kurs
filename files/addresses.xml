@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addresses>
+    <address id="myAddress">
+        <name>Maxine Muster</name>
+        <street>Musterweg 456</street>
+        <city>54321 Musterdorf</city>
+        <vatid>DE987654321</vatid>
+    </address>
+    <address id="companyA">
+        <name>Beispiel GmbH</name>
+        <street>Hauptstraße 456</street>
+        <city>98765 Traumstadt</city>
+    </address>
+    <address id="companyB">
+        <name>Firma XYZ</name>
+        <street>Nebenstraße 789</street>
+        <city>54321 Wunderland</city>
+    </address>
+</addresses>
