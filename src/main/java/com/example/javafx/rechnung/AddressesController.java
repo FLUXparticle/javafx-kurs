@@ -6,6 +6,7 @@ import jakarta.xml.bind.*;
 import javafx.beans.property.*;
 import javafx.collections.*;
 import javafx.event.*;
+import javafx.scene.control.*;
 
 public class AddressesController {
 
@@ -21,8 +22,38 @@ public class AddressesController {
         model.loadAddresses();
 
         addresses = FXCollections.observableList(model.getAddresses());
+        view.tableView.setItems(addresses);
 
-        // TODO Verbindungen herstellen
+        for (TableColumn<Address, String> column : view.columns) {
+            var onEditCommit = column.getOnEditCommit();
+            column.setOnEditCommit(event -> {
+                onEditCommit.handle(event);
+                dirty.set(true);
+            });
+        }
+
+        dirty.addListener((observable, oldValue, newValue) -> {
+            if (newValue) {
+                view.statusLabel.setText("");
+            }
+        });
+
+        // "+" Button
+        view.addButton.setOnAction(this::add);
+
+        // "-" Button
+        view.removeButton.setOnAction(this::remove);
+
+        // Enable "-" only if something is selected
+        view.removeButton.disableProperty().bind(
+            view.tableView.getSelectionModel().selectedItemProperty().isNull()
+        );
+
+        // "Speichern"-Button
+        view.saveButton.setOnAction(this::save);
+
+        // Enable "Speichern" only if something was changed
+        view.saveButton.disableProperty().bind(dirty.not());
     }
 
     private void add(ActionEvent event) {
