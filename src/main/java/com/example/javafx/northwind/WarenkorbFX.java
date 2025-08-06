@@ -9,7 +9,7 @@ public class WarenkorbFX  extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
         WarenkorbModel model = new WarenkorbModel();
-        WarenkorbView view = new WarenkorbView();
+        WarenkorbViewPage view = new WarenkorbViewPage();
         WarenkorbController controller = new WarenkorbController(model);
         controller.bind(view, primaryStage);
     }
