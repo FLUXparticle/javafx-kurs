@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<configuration>
+    <api name="Benutzerverwaltung">
+        <endpoint>
+            <verb>GET</verb>
+            <path>/api/users</path>
+            <authRequired>true</authRequired>
+        </endpoint>
+        <endpoint>
+            <verb>POST</verb>
+            <path>/api/users</path>
+            <authRequired>true</authRequired>
+        </endpoint>
+    </api>
+    <api name="Produkte">
+        <endpoint>
+            <verb>GET</verb>
+            <path>/api/products</path>
+            <authRequired>false</authRequired>
+        </endpoint>
+        <endpoint>
+            <verb>DELETE</verb>
+            <path>/api/products/{id}</path>
+            <authRequired>true</authRequired>
+        </endpoint>
+    </api>
+</configuration>
