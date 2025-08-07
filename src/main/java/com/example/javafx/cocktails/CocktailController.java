@@ -36,10 +36,10 @@ public class CocktailController {
         this.model = model;
         this.view = view;
 
-        alleZutaten = new AsyncListController<>(view.listAlle);
-        kuehlschrank = new AsyncListController<>(view.listKuehlschrank);
-        rezepte = new AsyncListController<>(view.listRezepte);
-        anweisungen = new AsyncListController<>(view.listAnweisungen);
+        alleZutaten = new AsyncListController<>(view.listAlle, this::loadIngredients);
+        kuehlschrank = new AsyncListController<>(view.listKuehlschrank, this::loadFridge);
+        rezepte = new AsyncListController<>(view.listRezepte, this::loadRezepte);
+        anweisungen = new AsyncListController<>(view.listAnweisungen, this::loadRecipe);
     }
 
     public void bind() {
@@ -136,7 +136,8 @@ public class CocktailController {
     }
 
     private <T> void updateInBackground(AsyncListController<T> list, Callable<List<T>> supplier) {
-        list.setItemsAsync(supplier);
+//        list.setItemsAsync(supplier);
+        list.update();
     }
 
 }

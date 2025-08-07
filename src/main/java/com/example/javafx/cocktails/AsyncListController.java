@@ -12,33 +12,40 @@ public class AsyncListController<T> {
 
     private final AsyncListView<T> view;
 
-    public AsyncListController(AsyncListView<T> view) {
-        this.view = view;
-        view.getListView().setItems(list);
-        view.getProgressIndicator().setVisible(false);
-    }
+    private final Service<List<T>> service;
 
-    public void setItemsAsync(Callable<List<T>> supplier) {
-        // clear and show indicator
-        list.clear();
-        Task<List<T>> task = new Task<>() {
+    public AsyncListController(AsyncListView<T> view, Callable<List<T>> supplier) {
+        this.view = view;
+
+        service = new Service<>() {
             @Override
-            protected List<T> call() throws Exception {
-                return supplier.call();
+            protected Task<List<T>> createTask() {
+                return new Task<>() {
+                    @Override
+                    protected List<T> call() throws Exception {
+                        return supplier.call();
+                    }
+                };
             }
         };
-        view.getProgressIndicator().visibleProperty().bind(task.runningProperty());
 
-        task.setOnSucceeded(event -> {
-            list.setAll(task.getValue());
+        service.setOnSucceeded(event -> {
+            List<T> result = service.getValue();
+            list.setAll(result);
         });
-        task.setOnFailed(event -> {
+        service.setOnFailed(event -> {
             Throwable exception = event.getSource().getException();
             // optionally handle error: e.g. log or show alert
             exception.printStackTrace();
         });
 
-        BackgroundService.runInBackground(task);
+        view.getListView().setItems(list);
+        view.getProgressIndicator().visibleProperty().bind(service.runningProperty());
+    }
+
+    public void update() {
+        list.clear();
+        service.restart();
     }
 
     public ObservableList<T> getList() {
