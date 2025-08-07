@@ -3,7 +3,6 @@ package com.example.javafx.cocktails;
 import com.example.javafx.cocktails.model.*;
 import com.tobiasdiez.easybind.*;
 import javafx.application.*;
-import javafx.collections.*;
 import javafx.scene.control.cell.*;
 import javafx.scene.paint.*;
 
@@ -28,51 +27,51 @@ public class CocktailController {
     private final CocktailModel model;
     private final CocktailView view;
 
-    private final ObservableList<Ingredient> alleZutaten = FXCollections.observableArrayList();
-    private final ObservableList<Ingredient> kuehlschrank = FXCollections.observableArrayList();
-    private final ObservableList<RezeptOhneZutaten> rezepte = FXCollections.observableArrayList();
-    private final ObservableList<AnweisungText> anweisungen = FXCollections.observableArrayList();
+    private final AsyncListController<Ingredient> alleZutaten;
+    private final AsyncListController<Ingredient> kuehlschrank;
+    private final AsyncListController<RezeptOhneZutaten> rezepte;
+    private final AsyncListController<AnweisungText> anweisungen;
 
     public CocktailController(CocktailModel model, CocktailView view) {
         this.model = model;
         this.view = view;
 
-        view.listAlle.setItems(alleZutaten);
-        view.listKuehlschrank.setItems(kuehlschrank);
-        view.listRezepte.setItems(rezepte);
-        view.listAnweisungen.setItems(anweisungen);
+        alleZutaten = new AsyncListController<>(view.listAlle);
+        kuehlschrank = new AsyncListController<>(view.listKuehlschrank);
+        rezepte = new AsyncListController<>(view.listRezepte);
+        anweisungen = new AsyncListController<>(view.listAnweisungen);
     }
 
     public void bind() {
         var filteredZutaten = EasyBind.map(view.txtSuche.textProperty(), text -> {
             var search = text.toLowerCase();
-            return alleZutaten.filtered(zutat -> zutat.name().toLowerCase().contains(search));
+            return alleZutaten.getList().filtered(zutat -> zutat.name().toLowerCase().contains(search));
         });
-        view.listAlle.itemsProperty().bind(filteredZutaten);
+        view.listAlle.getListView().itemsProperty().bind(filteredZutaten);
 
         updateIngredients();
         updateFridge();
         updateRezepte();
 
         view.btnAdd.setOnAction(event -> {
-            List<Ingredient> selected = view.listAlle.getSelectionModel().getSelectedItems();
+            List<Ingredient> selected = view.listAlle.getListView().getSelectionModel().getSelectedItems();
             updateFridge(selected, true);
         });
 
         view.btnRemove.setOnAction(event -> {
-            List<Ingredient> selected = view.listKuehlschrank.getSelectionModel().getSelectedItems();
+            List<Ingredient> selected = view.listKuehlschrank.getListView().getSelectionModel().getSelectedItems();
             updateFridge(selected, false);
         });
 
-        view.listRezepte.getSelectionModel().selectedItemProperty().addListener((obs, oldV, newV) -> {
+        view.listRezepte.getListView().getSelectionModel().selectedItemProperty().addListener((obs, oldV, newV) -> {
             if (newV != null) {
                 updateRecipe();
             }
         });
 
-        EasyObservableList<Integer> fridgeIDs = EasyBind.map(kuehlschrank, Ingredient::id);
+        EasyObservableList<Integer> fridgeIDs = EasyBind.map(kuehlschrank.getList(), Ingredient::id);
 
-        view.listAnweisungen.setCellFactory(lv -> {
+        view.listAnweisungen.getListView().setCellFactory(lv -> {
             var cell = new TextFieldListCell<AnweisungText>();
             Paint oldFill = cell.getTextFill();
 
@@ -132,21 +131,12 @@ public class CocktailController {
     }
 
     private List<AnweisungText> loadRecipe() throws IOException {
-        RezeptOhneZutaten selectedItem = view.listRezepte.getSelectionModel().getSelectedItem();
+        RezeptOhneZutaten selectedItem = view.listRezepte.getListView().getSelectionModel().getSelectedItem();
         return model.getAnweisungenFor(selectedItem.id());
     }
 
-    private <T> void updateInBackground(ObservableList<T> list, Callable<List<T>> supplier) {
-        BackgroundService.runInBackground(() -> {
-            try {
-                List<T> result = supplier.call();
-                Platform.runLater(() -> {
-                    list.setAll(result);
-                });
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        });
+    private <T> void updateInBackground(AsyncListController<T> list, Callable<List<T>> supplier) {
+        list.setItemsAsync(supplier);
     }
 
 }

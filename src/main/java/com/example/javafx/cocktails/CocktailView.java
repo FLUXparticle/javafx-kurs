@@ -9,10 +9,10 @@ import javafx.stage.*;
 
 public class CocktailView {
 
-    final ListView<Ingredient> listAlle = new ListView<>();
-    final ListView<Ingredient> listKuehlschrank = new ListView<>();
-    final ListView<RezeptOhneZutaten> listRezepte = new ListView<>();
-    final ListView<AnweisungText> listAnweisungen = new ListView<>();
+    final AsyncListView<Ingredient> listAlle = new AsyncListView<>();
+    final AsyncListView<Ingredient> listKuehlschrank = new AsyncListView<>();
+    final AsyncListView<RezeptOhneZutaten> listRezepte = new AsyncListView<>();
+    final AsyncListView<AnweisungText> listAnweisungen = new AsyncListView<>();
 
     final TextField txtSuche = new TextField();
 
@@ -21,7 +21,7 @@ public class CocktailView {
 
     public void build(Stage stage) {
         txtSuche.setPromptText("Suche");
-        listAlle.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+        listAlle.getListView().getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
 
         VBox zutatenBox = new VBox(10, txtSuche, listAlle);
         VBox.setVgrow(listAlle, Priority.ALWAYS);
@@ -29,7 +29,7 @@ public class CocktailView {
         VBox buttons = new VBox(10, btnAdd, btnRemove);
         buttons.setAlignment(Pos.CENTER);
 
-        listKuehlschrank.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+        listKuehlschrank.getListView().getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
         VBox kuehlschrankBox = new VBox(listKuehlschrank);
         VBox.setVgrow(listKuehlschrank, Priority.ALWAYS);
 
