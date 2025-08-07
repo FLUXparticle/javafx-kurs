@@ -1,7 +1,7 @@
 package com.example.javafx.cocktails;
 
-import javafx.application.*;
 import javafx.collections.*;
+import javafx.concurrent.*;
 
 import java.util.*;
 import java.util.concurrent.*;
@@ -19,19 +19,26 @@ public class AsyncListController<T> {
     }
 
     public void setItemsAsync(Callable<List<T>> supplier) {
-        view.getProgressIndicator().setVisible(true);
+        // clear and show indicator
         list.clear();
-        BackgroundService.runInBackground(() -> {
-            try {
-                List<T> data = supplier.call();
-                Platform.runLater(() -> {
-                    list.setAll(data);
-                    view.getProgressIndicator().setVisible(false);
-                });
-            } catch (Exception e) {
-                throw new RuntimeException(e);
+        Task<List<T>> task = new Task<>() {
+            @Override
+            protected List<T> call() throws Exception {
+                return supplier.call();
             }
+        };
+        view.getProgressIndicator().visibleProperty().bind(task.runningProperty());
+
+        task.setOnSucceeded(event -> {
+            list.setAll(task.getValue());
         });
+        task.setOnFailed(event -> {
+            Throwable exception = event.getSource().getException();
+            // optionally handle error: e.g. log or show alert
+            exception.printStackTrace();
+        });
+
+        BackgroundService.runInBackground(task);
     }
 
     public ObservableList<T> getList() {
