@@ -1,4 +1,4 @@
-package com.example.javafx.rechnung.model;
+package com.example.javafx.xml.model;
 
 import jakarta.xml.bind.*;
 

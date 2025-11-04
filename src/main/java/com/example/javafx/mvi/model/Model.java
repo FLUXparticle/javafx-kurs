@@ -18,10 +18,6 @@ public class Model {
         return state;
     }
 
-    public ViewState getState() {
-        return state.get();
-    }
-
     public void dispatch(Intent intent) {
         if (intent instanceof Intent.Submit submit) {
             String input = submit.input();
@@ -37,4 +33,5 @@ public class Model {
             state.set(new ViewState(out));
         }
     }
+
 }

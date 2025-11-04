@@ -8,12 +8,12 @@ public class AktienFX extends Application {
 
     @Override
     public void start(Stage primaryStage) {
-        // View und Controller anlegen
-        AktienView view = new AktienView();
-        new AktienController(view);
+        // Controller anlegen
+        AktienController controller = new AktienController();
+        Parent root = controller.getRoot();
 
         // Szene & Stage
-        Scene scene = new Scene(view, 750, 500);
+        Scene scene = new Scene(root, 750, 500);
         primaryStage.setTitle("Aktien");
         primaryStage.setScene(scene);
         primaryStage.show();

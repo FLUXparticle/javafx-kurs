@@ -2,10 +2,8 @@ package com.example.javafx.mvp;
 
 import com.example.javafx.mvp.model.*;
 import javafx.geometry.*;
-import javafx.scene.*;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
-import javafx.stage.*;
 
 public class View extends VBox implements Presenter {
 
@@ -24,6 +22,8 @@ public class View extends VBox implements Presenter {
             new Label("Ausgabe:"),
             tfOutput
         );
+
+        new Model(this);
     }
 
     @Override
@@ -39,13 +39,6 @@ public class View extends VBox implements Presenter {
     @Override
     public void onInput(Runnable handler) {
         tfInput.setOnAction(e -> handler.run());
-    }
-
-    public void buildStage(Stage stage) {
-        stage.setTitle("Passwort");
-        stage.setScene(new Scene(this, 400, 150));
-        stage.setResizable(false);
-        stage.show();
     }
 
 }

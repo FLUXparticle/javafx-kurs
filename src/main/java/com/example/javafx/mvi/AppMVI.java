@@ -1,21 +1,23 @@
 package com.example.javafx.mvi;
 
-import com.example.javafx.mvi.model.*;
 import javafx.application.*;
+import javafx.scene.*;
 import javafx.stage.*;
 
 public class AppMVI extends Application {
 
     @Override
     public void start(Stage primaryStage) {
-        Model model = new Model();
-        View view = new View(model);
+        View view = new View();
 
-        view.buildStage(primaryStage);
+        primaryStage.setTitle("Passwort");
+        primaryStage.setScene(new Scene(view, 400, 150));
+        primaryStage.setResizable(false);
+        primaryStage.show();
     }
 
     public static void main(String[] args) {
-        launch();
+        launch(args);
     }
 
 }

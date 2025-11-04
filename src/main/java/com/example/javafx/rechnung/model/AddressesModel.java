@@ -1,6 +1,7 @@
 package com.example.javafx.rechnung.model;
 
 import com.example.javafx.rechnung.data.*;
+import com.example.javafx.xml.model.*;
 import jakarta.xml.bind.*;
 
 import java.io.*;

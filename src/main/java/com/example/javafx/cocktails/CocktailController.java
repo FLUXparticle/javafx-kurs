@@ -4,6 +4,7 @@ import com.example.javafx.cocktails.model.*;
 import com.tobiasdiez.easybind.*;
 import javafx.application.*;
 import javafx.collections.*;
+import javafx.scene.*;
 import javafx.scene.control.cell.*;
 import javafx.scene.paint.*;
 
@@ -33,17 +34,15 @@ public class CocktailController {
     private final ObservableList<RezeptOhneZutaten> rezepte = FXCollections.observableArrayList();
     private final ObservableList<AnweisungText> anweisungen = FXCollections.observableArrayList();
 
-    public CocktailController(CocktailModel model, CocktailView view) {
-        this.model = model;
-        this.view = view;
+    public CocktailController() {
+        this.model = new CocktailModel();
+        this.view = new CocktailView();
 
         view.listAlle.setItems(alleZutaten);
         view.listKuehlschrank.setItems(kuehlschrank);
         view.listRezepte.setItems(rezepte);
         view.listAnweisungen.setItems(anweisungen);
-    }
 
-    public void bind() {
         var filteredZutaten = EasyBind.map(view.txtSuche.textProperty(), text -> {
             var search = text.toLowerCase();
             return alleZutaten.filtered(zutat -> zutat.name().toLowerCase().contains(search));
@@ -147,6 +146,14 @@ public class CocktailController {
                 e.printStackTrace();
             }
         });
+    }
+
+    public Parent getRoot() {
+        return view;
+    }
+
+    public void shutdown() {
+        BackgroundService.shutdown();
     }
 
 }

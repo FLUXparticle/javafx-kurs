@@ -1,12 +1,10 @@
 package com.example.javafx.rechnung;
 
 import javafx.geometry.*;
-import javafx.scene.*;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.scene.paint.*;
 import javafx.scene.shape.*;
-import javafx.stage.*;
 
 public class RechnungView extends BorderPane {
 
@@ -52,12 +50,6 @@ public class RechnungView extends BorderPane {
         logoPane.getChildren().addAll(circle, square, line);
 
         return logoPane;
-    }
-
-    public void buildStage(Stage stage) {
-        stage.setTitle("Rechnungsverwaltung");
-        stage.setScene(new Scene(this, 600, 400));
-        stage.show();
     }
 
 }

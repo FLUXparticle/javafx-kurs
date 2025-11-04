@@ -3,11 +3,9 @@ package com.example.javafx.rechnung;
 import com.example.javafx.rechnung.data.*;
 import javafx.beans.property.*;
 import javafx.geometry.*;
-import javafx.scene.*;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.*;
 import javafx.scene.layout.*;
-import javafx.stage.*;
 
 import java.util.function.*;
 
@@ -43,12 +41,6 @@ public class AddressesView extends VBox {
             setter.accept(address, value);
         });
         return column;
-    }
-
-    public void buildStage(Stage stage) {
-        stage.setTitle("Adressen");
-        stage.setScene(new Scene(this, 600, 400));
-        stage.show();
     }
 
 }

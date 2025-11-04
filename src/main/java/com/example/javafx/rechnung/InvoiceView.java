@@ -4,11 +4,9 @@ import com.example.javafx.rechnung.data.*;
 import javafx.beans.property.*;
 import javafx.collections.*;
 import javafx.geometry.*;
-import javafx.scene.*;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.*;
 import javafx.scene.layout.*;
-import javafx.stage.*;
 import javafx.util.*;
 import javafx.util.converter.*;
 
@@ -103,12 +101,6 @@ public class InvoiceView extends VBox {
             setter.accept(position, value);
         });
         return column;
-    }
-
-    public void buildStage(Stage stage) {
-        stage.setTitle("Rechnung bearbeiten");
-        stage.setScene(new Scene(this, 700, 800));
-        stage.show();
     }
 
 }

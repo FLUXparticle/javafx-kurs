@@ -2,6 +2,7 @@ package com.example.javafx.aktien.javafx;
 
 import com.example.javafx.aktien.model.*;
 import javafx.collections.*;
+import javafx.scene.*;
 import javafx.scene.control.*;
 
 public class AktienController {
@@ -11,8 +12,8 @@ public class AktienController {
 
     private final ObservableList<AktienView.RowData> rows = FXCollections.observableArrayList();
 
-    public AktienController(AktienView view) {
-        this.view  = view;
+    public AktienController() {
+        this.view  = new AktienView();
         this.model = new AktienGame();
 
         // initiale Verkabelung
@@ -91,4 +92,9 @@ public class AktienController {
         updateSlider();
         updateMoney();
     }
+
+    public Parent getRoot() {
+        return view;
+    }
+
 }

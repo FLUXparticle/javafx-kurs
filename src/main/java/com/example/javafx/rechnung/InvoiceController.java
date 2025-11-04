@@ -6,6 +6,7 @@ import jakarta.xml.bind.*;
 import javafx.beans.property.*;
 import javafx.collections.*;
 import javafx.event.*;
+import javafx.scene.*;
 import javafx.scene.control.*;
 
 import java.io.*;
@@ -14,7 +15,7 @@ import java.time.format.*;
 public class InvoiceController {
 
     private final InvoiceModel model;
-    final InvoiceView view;
+    private final InvoiceView view;
     private final ObservableList<Position> positions;
     private final ObservableList<String> lines;
     private final BooleanProperty dirty = new SimpleBooleanProperty(false);
@@ -79,6 +80,10 @@ public class InvoiceController {
         } catch (JAXBException ex) {
             view.statusLabel.setText("Fehler beim Speichern: " + ex.getMessage());
         }
+    }
+
+    public Parent getRoot() {
+        return view;
     }
 
 }

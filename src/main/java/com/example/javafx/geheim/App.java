@@ -1,17 +1,20 @@
 package com.example.javafx.geheim;
 
 import javafx.application.*;
+import javafx.scene.*;
 import javafx.stage.*;
 
 public class App extends Application {
 
     @Override
     public void start(Stage primaryStage) {
-        Model model = new Model();
-        View view = new View();
-        new Controller(view, model);
+        Controller controller = new Controller();
+        Parent root = controller.getRoot();
 
-        view.buildStage(primaryStage);
+        primaryStage.setTitle("Passwort");
+        primaryStage.setScene(new Scene(root, 400, 150));
+        primaryStage.setResizable(false);
+        primaryStage.show();
     }
 
     public static void main(String[] args) {
