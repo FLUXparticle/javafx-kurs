@@ -1,10 +1,8 @@
 package com.example.javafx.geheim;
 
 import javafx.geometry.*;
-import javafx.scene.*;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
-import javafx.stage.*;
 
 public class View extends VBox {
 
@@ -23,13 +21,6 @@ public class View extends VBox {
             new Label("Ausgabe:"),
             tfOutput
         );
-    }
-
-    public void buildStage(Stage stage) {
-        stage.setTitle("Passwort");
-        stage.setScene(new Scene(this, 400, 150));
-        stage.setResizable(false);
-        stage.show();
     }
 
 }

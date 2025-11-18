@@ -3,6 +3,8 @@ package com.example.javafx.cocktails;
 import com.example.javafx.cocktails.model.*;
 import com.tobiasdiez.easybind.*;
 import javafx.application.*;
+import javafx.collections.*;
+import javafx.scene.*;
 import javafx.scene.control.cell.*;
 import javafx.scene.paint.*;
 
@@ -32,17 +34,15 @@ public class CocktailController {
     private final AsyncListController<RezeptOhneZutaten> rezepte;
     private final AsyncListController<AnweisungText> anweisungen;
 
-    public CocktailController(CocktailModel model, CocktailView view) {
-        this.model = model;
-        this.view = view;
+    public CocktailController() {
+        this.model = new CocktailModel();
+        this.view = new CocktailView();
 
         alleZutaten = new AsyncListController<>(view.listAlle, this::loadIngredients);
         kuehlschrank = new AsyncListController<>(view.listKuehlschrank, this::loadFridge);
         rezepte = new AsyncListController<>(view.listRezepte, this::loadRezepte);
         anweisungen = new AsyncListController<>(view.listAnweisungen, this::loadRecipe);
-    }
 
-    public void bind() {
         var filteredZutaten = EasyBind.map(view.txtSuche.textProperty(), text -> {
             var search = text.toLowerCase();
             return alleZutaten.getList().filtered(zutat -> zutat.name().toLowerCase().contains(search));
@@ -138,6 +138,14 @@ public class CocktailController {
     private <T> void updateInBackground(AsyncListController<T> list, Callable<List<T>> supplier) {
 //        list.setItemsAsync(supplier);
         list.update();
+    }
+
+    public Parent getRoot() {
+        return view;
+    }
+
+    public void shutdown() {
+        BackgroundService.shutdown();
     }
 
 }

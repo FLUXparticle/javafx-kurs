@@ -2,12 +2,10 @@ package com.example.javafx.cocktails;
 
 import com.example.javafx.cocktails.model.*;
 import javafx.geometry.*;
-import javafx.scene.*;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
-import javafx.stage.*;
 
-public class CocktailView {
+public class CocktailView extends HBox {
 
     final AsyncListView<Ingredient> listAlle = new AsyncListView<>();
     final AsyncListView<Ingredient> listKuehlschrank = new AsyncListView<>();
@@ -19,33 +17,34 @@ public class CocktailView {
     final Button btnAdd = new Button(">");
     final Button btnRemove = new Button("<");
 
-    public void build(Stage stage) {
+    public CocktailView() {
+        this.setSpacing(10);
+        this.setPadding(new Insets(10));
+        this.setPrefSize(960, 600);
+
         txtSuche.setPromptText("Suche");
         listAlle.getListView().getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
 
         VBox zutatenBox = new VBox(10, txtSuche, listAlle);
         VBox.setVgrow(listAlle, Priority.ALWAYS);
+        this.getChildren().add(zutatenBox);
 
         VBox buttons = new VBox(10, btnAdd, btnRemove);
         buttons.setAlignment(Pos.CENTER);
+        this.getChildren().add(buttons);
 
         listKuehlschrank.getListView().getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
         VBox kuehlschrankBox = new VBox(listKuehlschrank);
         VBox.setVgrow(listKuehlschrank, Priority.ALWAYS);
+        this.getChildren().add(kuehlschrankBox);
 
         VBox rezeptBox = new VBox(listRezepte);
         VBox.setVgrow(listRezepte, Priority.ALWAYS);
+        this.getChildren().add(rezeptBox);
 
         VBox anweisungenBox = new VBox(listAnweisungen);
         VBox.setVgrow(listAnweisungen, Priority.ALWAYS);
-
-        HBox root = new HBox(10, zutatenBox, buttons, kuehlschrankBox, rezeptBox, anweisungenBox);
-        root.setPadding(new Insets(10));
-        root.setPrefSize(960, 600);
-
-        stage.setScene(new Scene(root));
-        stage.setTitle("Cocktails");
-        stage.show();
+        this.getChildren().add(anweisungenBox);
     }
 
 }

@@ -1,10 +1,8 @@
 package com.example.javafx.colors;
 
 import javafx.geometry.*;
-import javafx.scene.*;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
-import javafx.stage.*;
 
 public class View extends FlowPane {
 
@@ -24,12 +22,6 @@ public class View extends FlowPane {
             buttons[i] = button;
             getChildren().add(button);
         }
-    }
-
-    public void buildStage(Stage stage) {
-        stage.setScene(new Scene(this, 400, 100));
-        stage.setTitle("Farbwahl");
-        stage.show();
     }
 
 }

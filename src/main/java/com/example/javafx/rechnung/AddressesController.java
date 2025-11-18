@@ -7,11 +7,12 @@ import javafx.beans.property.*;
 import javafx.collections.*;
 import javafx.event.*;
 import javafx.scene.control.*;
+import javafx.scene.*;
 
 public class AddressesController {
 
     private final AddressesModel model;
-    final AddressesView view;
+    private final AddressesView view;
     private final ObservableList<Address> addresses;
     private final BooleanProperty dirty = new SimpleBooleanProperty(false);
 
@@ -78,6 +79,10 @@ public class AddressesController {
         } catch (JAXBException ex) {
             view.statusLabel.setText("Fehler beim Speichern: " + ex.getMessage());
         }
+    }
+
+    public Parent getRoot() {
+        return view;
     }
 
 }

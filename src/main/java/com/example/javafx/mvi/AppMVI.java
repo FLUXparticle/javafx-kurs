@@ -1,24 +1,23 @@
-package com.example.javafx.geheim;
+package com.example.javafx.mvi;
 
 import javafx.application.*;
 import javafx.scene.*;
 import javafx.stage.*;
 
-public class App extends Application {
+public class AppMVI extends Application {
 
     @Override
     public void start(Stage primaryStage) {
-        Controller controller = new Controller();
-        Parent root = controller.getRoot();
+        View view = new View();
 
         primaryStage.setTitle("Passwort");
-        primaryStage.setScene(new Scene(root, 400, 150));
+        primaryStage.setScene(new Scene(view, 400, 150));
         primaryStage.setResizable(false);
         primaryStage.show();
     }
 
     public static void main(String[] args) {
-        launch();
+        launch(args);
     }
 
 }
