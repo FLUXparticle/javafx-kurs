@@ -89,12 +89,8 @@ public class FlightBookerBase extends Application {
         boolean returnValid = flightType.getValue() == FlightType.ONE_WAY_FLIGHT || localReturnDate != null;
         boolean dateOrderValid = flightType.getValue() == FlightType.ONE_WAY_FLIGHT || (localStartDate != null && localReturnDate != null && !localStartDate.isAfter(localReturnDate));
 
-        if (!startValid) {
-            startDate.setStyle(STYLE_ERROR);
-        }
-        if (!returnValid || !dateOrderValid) {
-            returnDate.setStyle(STYLE_ERROR);
-        }
+        startDate.setStyle(startValid ? STYLE_NORMAL : STYLE_ERROR);
+        returnDate.setStyle((returnValid && dateOrderValid) ? STYLE_NORMAL : STYLE_ERROR);
     }
 
 }
