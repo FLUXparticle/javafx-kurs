@@ -20,24 +20,24 @@ public class WarenkorbController {
         cartItems = FXCollections.observableList(model.getCartItems());
     }
 
-    public void bind(WarenkorbViewPage view, Stage stage) {
+    public void bind(WarenkorbView view, Stage stage) {
         view.tableCart.setItems(cartItems);
-        view.textInput.textProperty().addListener((obs, oldVal, newVal) -> updateProductTable(view.products, newVal));
+        view.textInput.textProperty().addListener((obs, oldVal, newVal) -> updateProductTable(view.tableProducts, newVal));
         view.buttonToCart.setOnAction(event -> {
             Product selectedItem = view.tableProducts.getSelectionModel().getSelectedItem();
             addToCart(selectedItem, view.textAmount.getText());
         });
         view.buttonNewWindow.setOnAction(this::openNewWindow);
 
-        this.updateProductTable(view.products, view.textInput.getText());
+        this.updateProductTable(view.tableProducts, view.textInput.getText());
 
         view.buildStage(stage);
     }
 
-    public void updateProductTable(ObservableList<Product> list, String search) {
+    public void updateProductTable(TableView<Product> table, String search) {
         try {
             Collection<Product> products = database.getProductsLike(search);
-            list.setAll(products);
+            table.setItems(FXCollections.observableArrayList(products));
         } catch (Exception e) {
             showAlert("Fehler beim Laden der Produkte: " + e.getMessage());
             e.printStackTrace();
@@ -68,7 +68,7 @@ public class WarenkorbController {
     }
 
     private void openNewWindow(ActionEvent event) {
-        WarenkorbViewPage newView = new WarenkorbViewPage();
+        WarenkorbView newView = new WarenkorbView();
         Stage newStage = new Stage();
         bind(newView, newStage);
     }
