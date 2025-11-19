@@ -4,6 +4,8 @@ import com.example.javafx.todo.model.*;
 import javafx.event.*;
 import javafx.scene.*;
 import javafx.scene.control.*;
+import javafx.scene.control.cell.*;
+import javafx.util.*;
 
 public class ToDoController {
 
@@ -19,28 +21,92 @@ public class ToDoController {
     }
 
     private void initTree() {
-        // TODO Root-TreeItem aus dem Model aufbauen und im TreeView setzen.
-        // TODO TreeView konfigurieren (Root ausblenden, Single-Selection, Editable = true).
-        // TODO Eine TextFieldTreeCell mit StringConverter registrieren, damit Einträge editierbar werden.
+        ToDoItem rootItem = model.getRootItem();
+        TreeItem<ToDoItem> treeItem = buildTree(rootItem);
+        view.treeView.setRoot(treeItem);
+
+        view.treeView.setShowRoot(false);
+        view.treeView.setEditable(true);
+        view.treeView.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
+
+        view.treeView.setCellFactory(tv -> {
+            StringConverter<ToDoItem> stringConverter = new StringConverter<>() {
+                @Override
+                public String toString(ToDoItem obj) {
+                    return obj == null ? "" : obj.getName();
+                }
+
+                @Override
+                public ToDoItem fromString(String name) {
+                    return new ToDoItem(name);
+                }
+            };
+
+            return new TextFieldTreeCell<>(stringConverter) {
+                @Override
+                public void commitEdit(ToDoItem newItem) {
+                    ToDoItem oldItem = getItem();
+                    if (oldItem != null && newItem != null) {
+                        oldItem.setName(newItem.getName());
+                    }
+                    super.commitEdit(oldItem);
+                }
+            };
+        });
     }
 
     private TreeItem<ToDoItem> buildTree(ToDoItem toDoItem) {
-        // TODO Rekursiv TreeItems für das komplette ToDoItem-Modell erzeugen.
-        return null;
+        TreeItem<ToDoItem> treeItem = new TreeItem<>(toDoItem);
+
+        for (ToDoItem child : toDoItem.getChildren()) {
+            TreeItem<ToDoItem> childTree = buildTree(child);
+            treeItem.getChildren().add(childTree);
+        }
+
+        return treeItem;
     }
 
     private void initButtons() {
-        // TODO Button-Handler für Unteraufgabe anlegen und Löschen registrieren.
-        // TODO Buttons abhängig von der Selektion aktivieren/deaktivieren.
+        view.btnAdd.setOnAction(this::handleAdd);
+        view.btnDelete.setOnAction(this::handleDelete);
+
+        view.treeView.getSelectionModel().selectedItemProperty().addListener((o, oldItem, newItem) -> {
+            boolean hasSelection = newItem != null;
+            view.btnAdd.setDisable(!hasSelection);
+            view.btnDelete.setDisable(!hasSelection);
+        });
+
+        view.btnAdd.setDisable(true);
+        view.btnDelete.setDisable(true);
     }
 
     private void handleAdd(ActionEvent event) {
-        // TODO Aus der Selektion den Parent ermitteln, im Model eine neue Aufgabe anlegen
-        //      und den passenden TreeItem-Knoten ergänzen + editieren.
+        TreeItem<ToDoItem> selected = view.treeView.getSelectionModel().getSelectedItem();
+        if (selected != null) {
+            ToDoItem parentValue = selected.getValue();
+            ToDoItem newValue = model.addNewTask(parentValue);
+
+            TreeItem<ToDoItem> newItem = buildTree(newValue);
+            selected.getChildren().add(newItem);
+
+            view.treeView.getSelectionModel().select(newItem);
+            view.treeView.edit(newItem);
+        }
     }
 
     private void handleDelete(ActionEvent event) {
-        // TODO Selektierten Knoten aus TreeView und Model entfernen und danach Parent auswählen.
+        TreeItem<ToDoItem> selectedItem = view.treeView.getSelectionModel().getSelectedItem();
+        if (selectedItem != null) {
+            ToDoItem selectedValue = selectedItem.getValue();
+
+            TreeItem<ToDoItem> parentItem = selectedItem.getParent();
+            ToDoItem parentValue = parentItem.getValue();
+
+            model.removeChildTask(parentValue, selectedValue);
+            parentItem.getChildren().remove(selectedItem);
+
+            view.treeView.getSelectionModel().select(parentItem);
+        }
     }
 
     public Parent getRoot() {
