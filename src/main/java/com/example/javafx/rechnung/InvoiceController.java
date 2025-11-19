@@ -65,6 +65,7 @@ public class InvoiceController {
 
         setOnCommit(view.colText);
         setOnCommit(view.colPrice);
+        setOnCommit(view.colTaxRate);
 
         // Buttons für Positionen hinzufügen/löschen konfigurieren
         view.addPositionButton.setOnAction(e -> {

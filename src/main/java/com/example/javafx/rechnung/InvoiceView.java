@@ -28,6 +28,10 @@ public class InvoiceView extends VBox {
     final Label statusLabel;
     final TableColumn<Position, String> colText;
     final TableColumn<Position, Double> colPrice;
+    final TableColumn<Position, Double> colTaxRate;
+
+    private static final ObservableList<Double> DEFAULT_TAX_RATES =
+        FXCollections.observableArrayList(0.0, 7.0, 19.0);
 
     public InvoiceView() {
         setPadding(new Insets(10));
@@ -68,6 +72,9 @@ public class InvoiceView extends VBox {
         colPrice = column("Preis", 100, new DoubleStringConverter(), Position::getPrice, Position::setPrice);
         positionsTable.getColumns().add(colPrice);
 
+        colTaxRate = comboColumn("Steuersatz (%)", 140, DEFAULT_TAX_RATES, Position::getTaxRate, Position::setTaxRate);
+        positionsTable.getColumns().add(colTaxRate);
+
         addPositionButton = new Button("+");
         removePositionButton = new Button("-");
         HBox positionButtons = new HBox(5, addPositionButton, removePositionButton);
@@ -93,6 +100,28 @@ public class InvoiceView extends VBox {
         column.setCellValueFactory(param -> {
             Position position = param.getValue();
             T value = getter.apply(position);
+            return new ReadOnlyObjectWrapper<>(value);
+        });
+        column.setOnEditCommit(event -> {
+            Position position = event.getRowValue();
+            T value = event.getNewValue();
+            setter.accept(position, value);
+        });
+        return column;
+    }
+
+    private static <T> TableColumn<Position, T> comboColumn(String name, double width, ObservableList<T> choices,
+                                                            Function<Position, T> getter, BiConsumer<Position, T> setter) {
+        TableColumn<Position, T> column = new TableColumn<>(name);
+        column.setPrefWidth(width);
+        column.setCellFactory(ComboBoxTableCell.forTableColumn(choices));
+        column.setCellValueFactory(param -> {
+            Position position = param.getValue();
+            T value = getter.apply(position);
+            if (value == null && !choices.isEmpty()) {
+                value = choices.get(0);
+                setter.accept(position, value);
+            }
             return new ReadOnlyObjectWrapper<>(value);
         });
         column.setOnEditCommit(event -> {

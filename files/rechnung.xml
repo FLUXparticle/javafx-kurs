@@ -10,7 +10,7 @@
         <line>mit einem Teilnehmer</line>
     </course>
     <positions>
-        <position text="2 Tage x 1.000 €" price="2000"/>
-        <position text="Skript" price="100"/>
+        <position text="2 Tage x 1.000 €" price="2000" taxRate="19"/>
+        <position text="Skript" price="100" taxRate="7"/>
     </positions>
 </invoice>

@@ -14,6 +14,9 @@ public class Position {
     @XmlAttribute(name = "price")
     private Double price;
 
+    @XmlAttribute(name = "taxRate")
+    private Double taxRate = 19.0;
+
     public Position() {
     }
 
@@ -22,6 +25,7 @@ public class Position {
         final StringBuilder sb = new StringBuilder("Position{");
         sb.append("text='").append(text).append('\'');
         sb.append(", price=").append(price);
+        sb.append(", taxRate=").append(taxRate);
         sb.append('}');
         return sb.toString();
     }
@@ -38,6 +42,14 @@ public class Position {
     }
     public void setPrice(Double price) {
         this.price = price;
+    }
+
+    public Double getTaxRate() {
+        return taxRate;
+    }
+
+    public void setTaxRate(Double taxRate) {
+        this.taxRate = taxRate;
     }
 
 }
