@@ -8,9 +8,19 @@ public class CounterController {
 
     private final CounterView view;
 
+    private final Service<Void> service = new Service<>() {
+        @Override
+        protected Task<Void> createTask() {
+            return new CounterTask();
+        }
+    };
+
     public CounterController() {
         this.view = new CounterView();
         this.view.startButton.setOnAction(this::startCounting);
+
+        view.progressBar.progressProperty().bind(service.progressProperty());
+        view.textField.textProperty().bind(service.messageProperty());
     }
 
     public Parent getRoot() {
@@ -18,12 +28,7 @@ public class CounterController {
     }
 
     private void startCounting(ActionEvent event) {
-        var task = new CounterTask();
-
-        view.textField.textProperty().bind(task.messageProperty());
-        view.progressBar.progressProperty().bind(task.progressProperty());
-
-        new Thread(task).start();
+        service.restart();
     }
 
     private static class CounterTask extends Task<Void> {
