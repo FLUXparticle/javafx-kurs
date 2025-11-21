@@ -1,5 +1,6 @@
 package com.example.javafx.counter;
 
+import com.tobiasdiez.easybind.*;
 import javafx.concurrent.*;
 import javafx.event.*;
 import javafx.scene.*;
@@ -19,7 +20,8 @@ public class CounterController {
         this.view = new CounterView();
         this.view.startButton.setOnAction(this::startCounting);
 
-        view.progressBar.progressProperty().bind(service.progressProperty());
+        EasyBinding<Double> vProgress = EasyBind.map(service.progressProperty(), progress -> Math.max(0, progress.doubleValue()));
+        view.progressBar.progressProperty().bind(vProgress);
         view.textField.textProperty().bind(service.messageProperty());
     }
 
