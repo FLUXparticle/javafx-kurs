@@ -1,5 +1,6 @@
 package com.example.javafx.counter;
 
+import javafx.application.*;
 import javafx.event.*;
 import javafx.scene.*;
 
@@ -17,14 +18,20 @@ public class CounterController {
     }
 
     private void startCounting(ActionEvent event) {
-        // BLOCKIERT den JavaFX-Thread komplett!
-        for (int i = 1; i <= 100; i++) {
-            try { Thread.sleep(50); } catch (Exception ignored) {}
+        Thread worker = new Thread(() -> {
+            for (int i = 1; i <= 100; i++) {
+                try { Thread.sleep(50); } catch (Exception ignored) {}
 
-            System.out.println(Thread.currentThread().getName() + ": " + i);
-            view.textField.setText(String.valueOf(i));
-            view.progressBar.setProgress(i / 100.0);
-        }
+                System.out.println(Thread.currentThread().getName() + ": " + i);
+                int value = i;
+                Platform.runLater(() -> {
+                    view.textField.setText(String.valueOf(value));
+                    view.progressBar.setProgress(value / 100.0);
+                });
+            }
+        });
+
+        worker.start();
     }
 
 }
